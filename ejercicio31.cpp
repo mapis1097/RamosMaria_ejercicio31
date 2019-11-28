@@ -2,23 +2,21 @@
 #include<cmath>
 #include <math.h>
 //se llama el metodo
-void ecuacion (float s, float d, float Ctiempo, float Cespacio, float deltaT, float deltaX, double ce, double ce_prim);
+void ecuacion (float L, int Ctiempo, int Cespacio, float deltaT, float deltaX, double ce, double ce_prim);
 
 //ejecuta el codigo
 int main (){
     //variables
-    float phi_1 = 0.0;
-    float phi_2 = 0.0;
-    float deltaX = 2.0/30.0;
+    
+    float L = 1;
+    float deltaX = 0.01;
     float deltaT = 0.01;
-    float tiempo = 1;
-    float D = 1;
-    float s = 1;
-    float CTiempo = tiempo / deltaT;
-    float CEspacio = 30;
-    double ce = deltaT/deltaX;
-    double ce_prim = ce;
-    ecuacion(s, D, CTiempo, CEspacio, deltaT, deltaX, ce, ce_prim);
+    float tiempo = 6;
+    int Cespacio = (int)(L/deltaX) + 1;
+    int CTiempo = (int)(tiempo/deltaT);
+    double ce = 0.5;
+    double ce_prim = 1.0;
+    ecuacion(L, CTiempo, (int)Cespacio, deltaT, deltaX, ce, ce_prim);
    
  return 0;
 }
@@ -27,29 +25,42 @@ int main (){
 
 
 //metodos
-void ecuacion (float s, float d, float Ctiempo, float Cespacio, float deltaT, float deltaX, double ce, double ce_prim){
-    float anterior[30];
-    float actual[30];
- for ( int l = 0; l < Cespacio; l++){
-            anterior[l] = 0;
+void ecuacion (float L, int Ctiempo, int Cespacio, float deltaT, float deltaX, double ce, double ce_prim){
+    float anterior[Cespacio];
+    float actual[Cespacio];
+    float anterior_2[Cespacio];
+    float pi = asin(1.0) * 2.0;
+    for ( int l = 0; l < Cespacio; l++){
+            anterior_2[l] = sin((pi * deltaX * l)/L) ;
         }
-    for (int i = 0; i < Ctiempo; i ++){
-        std::cout<<std::endl;
+    
+     for ( int l = 0; l < Cespacio; l++){
+         if (l == 0 || l == Cespacio-1){
+            anterior[l] = 0;
+         }
+        else
+            anterior[l] = anterior_2[l] + (ce*ce)/(2*ce_prim*ce_prim) * (anterior_2[l+1] + anterior_2[l-1] - (2* anterior_2[l]));
+        }
+    
+     for (int i = 2; i < Ctiempo; i ++){
         for (int k = 0; k < Cespacio; k++){
             std::cout << anterior[k]<< "\t";
         }
         std::cout<<std::endl;
+        
         for (int j = 0; j < Cespacio; j ++)
         {
             if (j == 0 || j == Cespacio-1){
                 actual[j] = 0;
             }
             else{
-                actual [j] = 2*anterior[j] - anterior[j-1] + ((ce*ce)/(ce_prim*ce_prim)) * (anterior[j+1] + anterior[j-1] - (2* anterior[j]));        
+                actual [j] = 2*anterior[j] - anterior_2[j] + ((ce*ce)/(ce_prim*ce_prim)) * (anterior[j+1] + anterior[j-1] - (2* anterior[j]));        
             }
            
         }
         for ( int l = 0; l < Cespacio; l++){
+            
+            anterior_2[l] = anterior[l];
             anterior[l] = actual[l];
         }
          
