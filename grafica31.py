@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 data = np.loadtxt("oscilador.dat")
     
     
-plt.figure(figsize=(25,4))
+plt.figure(figsize=(15,4))
     
 plt.subplot(1,3,1)
 s = np.shape(data)
@@ -13,7 +13,7 @@ n_x = s[1]
 n_t = s[0]
 deltaX = s[1]
 deltaT = s[0]
-plt.imshow(data)
+plt.imshow(data, extent =[-1,1,1,0], aspect = 2.0)
 plt.colorbar(label="primera grafica")
 plt.xlabel("X")
 plt.ylabel("T")
